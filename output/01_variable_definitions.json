@@ -1,0 +1,674 @@
+{
+  "meta": {
+    "chunk_count": 14,
+    "model": "gpt-5.5",
+    "base_url": "https://api.bltcy.ai/v1",
+    "record_count": 45,
+    "generated_at": "2026-05-09 23:04:24",
+    "chunk_output_dir": "output\\stage1_chunks",
+    "domain_hint": "Generic specification for structured messages/packets (protocol-agnostic)"
+  },
+  "definitions": [
+    {
+      "variable_name": "body",
+      "alias": [],
+      "type": "select (HandshakeType)",
+      "definition": "Handshake message body selected according to the HandshakeType.",
+      "initial_value_or_range": "May be HelloRequest, ClientHello, HelloVerifyRequest, ServerHello, Certificate, ServerKeyExchange, CertificateRequest, ServerHelloDone, CertificateVerify, ClientKeyExchange, or Finished depending on HandshakeType.",
+      "module_or_section": "4.2.2. Handshake Message Format",
+      "evidence": "select (HandshakeType) {\n       case hello_request: HelloRequest;\n       case client_hello:  ClientHello;\n       case hello_verify_request: HelloVerifyRequest;  // New type\n       case server_hello:  ServerHello;\n       case certificate:Certificate;\n       case server_key_exchange: ServerKeyExchange;\n       case certificate_request: CertificateRequest;\n       case server_hello_done:ServerHelloDone;\n       case certificate_verify:  CertificateVerify;\n       case client_key_exchange: ClientKeyExchange;\n       case finished: Finished;\n     } body;",
+      "source_chunks": [
+        "chunk_0008",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "certificate",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for certificate.",
+      "initial_value_or_range": "11",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "certificate(11)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "certificate_request",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for certificate_request.",
+      "initial_value_or_range": "13",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "certificate_request(13)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "certificate_verify",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for certificate_verify.",
+      "initial_value_or_range": "15",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "certificate_verify(15)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "cipher_suites",
+      "alias": [],
+      "type": "CipherSuite vector",
+      "definition": "Cipher suites field in the DTLS ClientHello message.",
+      "initial_value_or_range": "2..2^16-1",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "CipherSuite cipher_suites<2..2^16-1>;",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "client_hello",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for client_hello.",
+      "initial_value_or_range": "1",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "client_hello(1)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "client_key_exchange",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for client_key_exchange.",
+      "initial_value_or_range": "16",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "client_key_exchange(16)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "client_version",
+      "alias": [],
+      "type": "ProtocolVersion",
+      "definition": "Client protocol version field in the DTLS ClientHello message.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "struct {\n     ProtocolVersion client_version;\n     Random random;\n     SessionID session_id;\n     opaque cookie<0..2^8-1>;                             // New field\n     CipherSuite cipher_suites<2..2^16-1>;\n           CompressionMethod compression_methods<1..2^8-1>;\n   } ClientHello;",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "compression_methods",
+      "alias": [],
+      "type": "CompressionMethod vector",
+      "definition": "Compression methods field in the DTLS ClientHello message.",
+      "initial_value_or_range": "1..2^8-1",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "CompressionMethod compression_methods<1..2^8-1>;",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "cookie",
+      "alias": [
+        "Cookie"
+      ],
+      "type": "opaque vector",
+      "definition": "Stateless cookie value added to the DTLS ClientHello message.",
+      "initial_value_or_range": "0..2^8-1; when sending the first ClientHello, the Cookie field is left empty (zero length).",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "opaque cookie<0..2^8-1>;                             // New field\n...\nWhen sending the first ClientHello, the client does not have a cookie yet; in this case, the Cookie field is left empty (zero length).",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0008",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "epoch",
+      "alias": [],
+      "type": "uint16",
+      "definition": "A counter value that is incremented on every cipher state change.",
+      "initial_value_or_range": "Initially zero; incremented each time a ChangeCipherSpec message is sent",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ... uint16 epoch; // New field ... } DTLSPlaintext; epoch A counter value that is incremented on every cipher state change. The epoch number is initially zero and is incremented each time a ChangeCipherSpec message is sent.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0006",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "finished",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for finished.",
+      "initial_value_or_range": "20",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "finished(20)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "fragment",
+      "alias": [],
+      "type": "opaque fragment[DTLSPlaintext.length]",
+      "definition": "Identical to the fragment field of a TLS 1.2 record.",
+      "initial_value_or_range": "Length is DTLSPlaintext.length",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ... opaque fragment[DTLSPlaintext.length]; } DTLSPlaintext; fragment Identical to the fragment field of a TLS 1.2 record.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "fragment_length",
+      "alias": [],
+      "type": "uint24",
+      "definition": "Handshake message fragment length field in the DTLS Handshake structure.",
+      "initial_value_or_range": "For an unfragmented message: fragment_length=length.",
+      "module_or_section": "4.2.2. Handshake Message Format",
+      "evidence": "uint24 fragment_length;                           // New field",
+      "source_chunks": [
+        "chunk_0008",
+        "chunk_0009",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "fragment_offset",
+      "alias": [],
+      "type": "uint24",
+      "definition": "Handshake message fragment offset field in the DTLS Handshake structure.",
+      "initial_value_or_range": "For an unfragmented message: fragment_offset=0.",
+      "module_or_section": "4.2.2. Handshake Message Format",
+      "evidence": "uint24 fragment_offset;                           // New field",
+      "source_chunks": [
+        "chunk_0008",
+        "chunk_0009",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "hello_request",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for hello_request.",
+      "initial_value_or_range": "0",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "hello_request(0)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "hello_verify_request",
+      "alias": [],
+      "type": "Handshake message type",
+      "definition": "Handshake message type value for HelloVerifyRequest.",
+      "initial_value_or_range": "3",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / HelloVerifyRequest",
+      "evidence": "The HelloVerifyRequest message type is hello_verify_request(3).",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012",
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "length",
+      "alias": [],
+      "type": "uint16",
+      "definition": "Identical to the length field in a TLS 1.2 record.",
+      "initial_value_or_range": "Should not exceed 2^14",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ... uint16 length; ... } DTLSPlaintext; length Identical to the length field in a TLS 1.2 record. As in TLS 1.2, the length should not exceed 2^14.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0008",
+        "chunk_0009",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "level",
+      "alias": [],
+      "type": "",
+      "definition": "Alert level field used when generating a bad_record_mac alert for an invalid MAC.",
+      "initial_value_or_range": "fatal",
+      "module_or_section": "4.1.2.1. MAC",
+      "evidence": "If a DTLS implementation chooses to generate an alert when it receives a message with an invalid MAC, it MUST generate a bad_record_mac alert with level fatal",
+      "source_chunks": [
+        "chunk_0006"
+      ]
+    },
+    {
+      "variable_name": "message_seq",
+      "alias": [],
+      "type": "uint16",
+      "definition": "Handshake message sequence number field used to order DTLS handshake messages.",
+      "initial_value_or_range": "First message each side transmits in each handshake has message_seq = 0; incremented by one for each new message; retransmissions use the same value.",
+      "module_or_section": "4.2.2. Handshake Message Format",
+      "evidence": "uint16 message_seq;                               // New field\n\nThe first message each side transmits in each handshake always has\n   message_seq = 0.  Whenever each new message is generated, the\n   message_seq value is incremented by one.",
+      "source_chunks": [
+        "chunk_0008",
+        "chunk_0009",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "msg_type",
+      "alias": [],
+      "type": "HandshakeType",
+      "definition": "Handshake message type field in the DTLS Handshake structure.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.2.2. Handshake Message Format",
+      "evidence": "struct {\n     HandshakeType msg_type;",
+      "source_chunks": [
+        "chunk_0008",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "random",
+      "alias": [],
+      "type": "Random",
+      "definition": "Random field in the DTLS ClientHello message.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "struct {\n     ProtocolVersion client_version;\n     Random random;\n     SessionID session_id;\n     opaque cookie<0..2^8-1>;                             // New field\n     CipherSuite cipher_suites<2..2^16-1>;\n           CompressionMethod compression_methods<1..2^8-1>;\n   } ClientHello;",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "sequence number",
+      "alias": [],
+      "type": "",
+      "definition": "DTLS record field used for MAC computation and replay protection; concatenated with epoch to form a 64-bit value for MAC computation.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.1.2.1. MAC; 4.1.2.6. Anti-Replay",
+      "evidence": "the sequence number used to compute the MAC is the 64-bit value formed by concatenating the epoch and the sequence number in the order they appear on the wire; DTLS records contain a sequence number to provide replay protection.",
+      "source_chunks": [
+        "chunk_0006"
+      ]
+    },
+    {
+      "variable_name": "sequence_number",
+      "alias": [],
+      "type": "uint48",
+      "definition": "The sequence number for this record.",
+      "initial_value_or_range": "Initially 0 for each epoch",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ... uint48 sequence_number; // New field ... } DTLSPlaintext; sequence_number The sequence number for this record. Sequence numbers are maintained separately for each epoch, with each sequence_number initially being 0 for each epoch.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "server_hello",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for server_hello.",
+      "initial_value_or_range": "2",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "server_hello(2)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "server_hello_done",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for server_hello_done.",
+      "initial_value_or_range": "14",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "server_hello_done(14)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "server_key_exchange",
+      "alias": [],
+      "type": "HandshakeType enum value",
+      "definition": "HandshakeType identifier for server_key_exchange.",
+      "initial_value_or_range": "12",
+      "module_or_section": "4.3.2. Handshake Protocol / HandshakeType",
+      "evidence": "server_key_exchange (12)",
+      "source_chunks": [
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "server_version",
+      "alias": [],
+      "type": "ProtocolVersion",
+      "definition": "Server protocol version field in the DTLS HelloVerifyRequest message.",
+      "initial_value_or_range": "DTLS 1.2 server implementations SHOULD use DTLS version 1.0 in HelloVerifyRequest.",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / HelloVerifyRequest",
+      "evidence": "struct {\n     ProtocolVersion server_version;\n     opaque cookie<0..2^8-1>;\n   } HelloVerifyRequest;\n\nThe server_version field has the same syntax as in TLS. However ... DTLS 1.2 server implementations SHOULD use DTLS version 1.0",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "session_id",
+      "alias": [],
+      "type": "SessionID",
+      "definition": "Session identifier field in the DTLS ClientHello message.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.2.1 Denial-of-Service Countermeasures / ClientHello",
+      "evidence": "struct {\n     ProtocolVersion client_version;\n     Random random;\n     SessionID session_id;\n     opaque cookie<0..2^8-1>;                             // New field\n     CipherSuite cipher_suites<2..2^16-1>;\n           CompressionMethod compression_methods<1..2^8-1>;\n   } ClientHello;",
+      "source_chunks": [
+        "chunk_0007",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "TLS_DH_anon_WITH_RC4_128_MD5",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x18",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x18 TLS_DH_anon_WITH_RC4_128_MD5          [RFC5246]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_DHE_PSK_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x8E",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x8E TLS_DHE_PSK_WITH_RC4_128_SHA          [RFC4279]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDH_anon_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x16",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x16 TLS_ECDH_anon_WITH_RC4_128_SHA        [RFC4492]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x02",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x02 TLS_ECDH_ECDSA_WITH_RC4_128_SHA       [RFC4492]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDH_RSA_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x0C",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x0C TLS_ECDH_RSA_WITH_RC4_128_SHA         [RFC4492]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x07",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x07 TLS_ECDHE_ECDSA_WITH_RC4_128_SHA      [RFC4492]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDHE_PSK_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x33",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x33 TLS_ECDHE_PSK_WITH_RC4_128_SHA        [RFC5489]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0xC0,0x11",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0xC0,0x11 TLS_ECDHE_RSA_WITH_RC4_128_SHA        [RFC4492]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_KRB5_EXPORT_WITH_RC4_40_MD5",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x2B",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x2B TLS_KRB5_EXPORT_WITH_RC4_40_MD5       [RFC2712]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_KRB5_EXPORT_WITH_RC4_40_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x28",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x28 TLS_KRB5_EXPORT_WITH_RC4_40_SHA       [RFC2712]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_KRB5_WITH_RC4_128_MD5",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x24",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x24 TLS_KRB5_WITH_RC4_128_MD5             [RFC2712]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_KRB5_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x20",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x20 TLS_KRB5_WITH_RC4_128_SHA             [RFC2712]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_PSK_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x8A",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x8A TLS_PSK_WITH_RC4_128_SHA              [RFC4279]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "TLS_RSA_PSK_WITH_RC4_128_SHA",
+      "alias": [],
+      "type": "TLS cipher suite identifier",
+      "definition": "Cipher suite registry entry.",
+      "initial_value_or_range": "0x00,0x92",
+      "module_or_section": "TLS cipher suite registry excerpt",
+      "evidence": "0x00,0x92 TLS_RSA_PSK_WITH_RC4_128_SHA          [RFC4279]",
+      "source_chunks": [
+        "chunk_0013"
+      ]
+    },
+    {
+      "variable_name": "type",
+      "alias": [],
+      "type": "ContentType",
+      "definition": "Equivalent to the type field in a TLS 1.2 record.",
+      "initial_value_or_range": "",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ContentType type; ... } DTLSPlaintext; type Equivalent to the type field in a TLS 1.2 record.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    },
+    {
+      "variable_name": "version",
+      "alias": [],
+      "type": "ProtocolVersion",
+      "definition": "The version of the protocol being employed.",
+      "initial_value_or_range": "DTLS version 1.2 uses { 254, 253 }; version value 254.253",
+      "module_or_section": "4.1. Record Layer / DTLSPlaintext",
+      "evidence": "struct { ... ProtocolVersion version; ... } DTLSPlaintext; version The version of the protocol being employed. This document describes DTLS version 1.2, which uses the version { 254, 253 }.",
+      "source_chunks": [
+        "chunk_0004",
+        "chunk_0011",
+        "chunk_0012"
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "chunk_id": "chunk_0001",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0002",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0003",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "parsed_count": 6,
+      "raw_response": "[\n  {\n    \"variable_name\": \"type\",\n    \"alias\": [],\n    \"type\": \"ContentType\",\n    \"definition\": \"Equivalent to the type field in a TLS 1.2 record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ContentType type; ... } DTLSPlaintext; type Equivalent to the type field in a TLS 1.2 record.\"\n  },\n  {\n    \"variable_name\": \"version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"The version of the protocol being employed.\",\n    \"initial_value_or_range\": \"DTLS version 1.2 uses { 254, 253 }; version value 254.253\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ... ProtocolVersion version; ... } DTLSPlaintext; version The version of the protocol being employed. This document describes DTLS version 1.2, which uses the version { 254, 253 }.\"\n  },\n  {\n    \"variable_name\": \"epoch\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"A counter value that is incremented on every cipher state change.\",\n    \"initial_value_or_range\": \"Initially zero; incremented each time a ChangeCipherSpec message is sent\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ... uint16 epoch; // New field ... } DTLSPlaintext; epoch A counter value that is incremented on every cipher state change. The epoch number is initially zero and is incremented each time a ChangeCipherSpec message is sent.\"\n  },\n  {\n    \"variable_name\": \"sequence_number\",\n    \"alias\": [],\n    \"type\": \"uint48\",\n    \"definition\": \"The sequence number for this record.\",\n    \"initial_value_or_range\": \"Initially 0 for each epoch\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ... uint48 sequence_number; // New field ... } DTLSPlaintext; sequence_number The sequence number for this record. Sequence numbers are maintained separately for each epoch, with each sequence_number initially being 0 for each epoch.\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Identical to the length field in a TLS 1.2 record.\",\n    \"initial_value_or_range\": \"Should not exceed 2^14\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ... uint16 length; ... } DTLSPlaintext; length Identical to the length field in a TLS 1.2 record. As in TLS 1.2, the length should not exceed 2^14.\"\n  },\n  {\n    \"variable_name\": \"fragment\",\n    \"alias\": [],\n    \"type\": \"opaque fragment[DTLSPlaintext.length]\",\n    \"definition\": \"Identical to the fragment field of a TLS 1.2 record.\",\n    \"initial_value_or_range\": \"Length is DTLSPlaintext.length\",\n    \"module_or_section\": \"4.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct { ... opaque fragment[DTLSPlaintext.length]; } DTLSPlaintext; fragment Identical to the fragment field of a TLS 1.2 record.\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0005",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0006",
+      "parsed_count": 4,
+      "raw_response": "[\n  {\n    \"variable_name\": \"epoch\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"On-the-wire DTLS record value concatenated with the sequence number to form the 64-bit sequence number used to compute the MAC.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.1.2.1. MAC\",\n    \"evidence\": \"the sequence number used to compute the MAC is the 64-bit value formed by concatenating the epoch and the sequence number in the order they appear on the wire\"\n  },\n  {\n    \"variable_name\": \"sequence number\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"DTLS record field used for MAC computation and replay protection; concatenated with epoch to form a 64-bit value for MAC computation.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.1.2.1. MAC; 4.1.2.6. Anti-Replay\",\n    \"evidence\": \"the sequence number used to compute the MAC is the 64-bit value formed by concatenating the epoch and the sequence number in the order they appear on the wire; DTLS records contain a sequence number to provide replay protection.\"\n  },\n  {\n    \"variable_name\": \"protocol version number\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"On-the-wire DTLS protocol version number used to parameterize the TLS MAC calculation.\",\n    \"initial_value_or_range\": \"{254, 253} for DTLS 1.2\",\n    \"module_or_section\": \"4.1.2.1. MAC\",\n    \"evidence\": \"TLS MAC calculation is parameterized on the protocol version number, which, in the case of DTLS, is the on-the-wire version, i.e., {254, 253} for DTLS 1.2.\"\n  },\n  {\n    \"variable_name\": \"level\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"Alert level field used when generating a bad_record_mac alert for an invalid MAC.\",\n    \"initial_value_or_range\": \"fatal\",\n    \"module_or_section\": \"4.1.2.1. MAC\",\n    \"evidence\": \"If a DTLS implementation chooses to generate an alert when it receives a message with an invalid MAC, it MUST generate a bad_record_mac alert with level fatal\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0007",
+      "parsed_count": 9,
+      "raw_response": "[\n  {\n    \"variable_name\": \"client_version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Client protocol version field in the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"struct {\\n     ProtocolVersion client_version;\\n     Random random;\\n     SessionID session_id;\\n     opaque cookie<0..2^8-1>;                             // New field\\n     CipherSuite cipher_suites<2..2^16-1>;\\n           CompressionMethod compression_methods<1..2^8-1>;\\n   } ClientHello;\"\n  },\n  {\n    \"variable_name\": \"random\",\n    \"alias\": [],\n    \"type\": \"Random\",\n    \"definition\": \"Random field in the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"struct {\\n     ProtocolVersion client_version;\\n     Random random;\\n     SessionID session_id;\\n     opaque cookie<0..2^8-1>;                             // New field\\n     CipherSuite cipher_suites<2..2^16-1>;\\n           CompressionMethod compression_methods<1..2^8-1>;\\n   } ClientHello;\"\n  },\n  {\n    \"variable_name\": \"session_id\",\n    \"alias\": [],\n    \"type\": \"SessionID\",\n    \"definition\": \"Session identifier field in the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"struct {\\n     ProtocolVersion client_version;\\n     Random random;\\n     SessionID session_id;\\n     opaque cookie<0..2^8-1>;                             // New field\\n     CipherSuite cipher_suites<2..2^16-1>;\\n           CompressionMethod compression_methods<1..2^8-1>;\\n   } ClientHello;\"\n  },\n  {\n    \"variable_name\": \"cookie\",\n    \"alias\": [\n      \"Cookie\"\n    ],\n    \"type\": \"opaque vector\",\n    \"definition\": \"Stateless cookie value added to the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"0..2^8-1; when sending the first ClientHello, the Cookie field is left empty (zero length).\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"opaque cookie<0..2^8-1>;                             // New field\\n...\\nWhen sending the first ClientHello, the client does not have a cookie yet; in this case, the Cookie field is left empty (zero length).\"\n  },\n  {\n    \"variable_name\": \"cipher_suites\",\n    \"alias\": [],\n    \"type\": \"CipherSuite vector\",\n    \"definition\": \"Cipher suites field in the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"2..2^16-1\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"CipherSuite cipher_suites<2..2^16-1>;\"\n  },\n  {\n    \"variable_name\": \"compression_methods\",\n    \"alias\": [],\n    \"type\": \"CompressionMethod vector\",\n    \"definition\": \"Compression methods field in the DTLS ClientHello message.\",\n    \"initial_value_or_range\": \"1..2^8-1\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / ClientHello\",\n    \"evidence\": \"CompressionMethod compression_methods<1..2^8-1>;\"\n  },\n  {\n    \"variable_name\": \"server_version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Server protocol version field in the DTLS HelloVerifyRequest message.\",\n    \"initial_value_or_range\": \"DTLS 1.2 server implementations SHOULD use DTLS version 1.0 in HelloVerifyRequest.\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / HelloVerifyRequest\",\n    \"evidence\": \"struct {\\n     ProtocolVersion server_version;\\n     opaque cookie<0..2^8-1>;\\n   } HelloVerifyRequest;\\n\\nThe server_version field has the same syntax as in TLS. However ... DTLS 1.2 server implementations SHOULD use DTLS version 1.0\"\n  },\n  {\n    \"variable_name\": \"cookie\",\n    \"alias\": [],\n    \"type\": \"opaque vector\",\n    \"definition\": \"Stateless cookie value contained in the DTLS HelloVerifyRequest message.\",\n    \"initial_value_or_range\": \"0..2^8-1\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / HelloVerifyRequest\",\n    \"evidence\": \"struct {\\n     ProtocolVersion server_version;\\n     opaque cookie<0..2^8-1>;\\n   } HelloVerifyRequest;\"\n  },\n  {\n    \"variable_name\": \"hello_verify_request\",\n    \"alias\": [],\n    \"type\": \"Handshake message type\",\n    \"definition\": \"Handshake message type value for HelloVerifyRequest.\",\n    \"initial_value_or_range\": \"3\",\n    \"module_or_section\": \"4.2.1 Denial-of-Service Countermeasures / HelloVerifyRequest\",\n    \"evidence\": \"The HelloVerifyRequest message type is hello_verify_request(3).\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0008",
+      "parsed_count": 7,
+      "raw_response": "[\n  {\n    \"variable_name\": \"Cookie\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"Cookie value generated by the DTLS server for cookie exchange; suggested construction is HMAC over a server secret, client IP, and client parameters.\",\n    \"initial_value_or_range\": \"Size limit increased to 255 bytes; limit remains 32 bytes for previous DTLS versions.\",\n    \"module_or_section\": \"Cookie exchange\",\n    \"evidence\": \"Note: This specification increases the cookie size limit to 255 bytes... Cookie = HMAC(Secret, Client-IP, Client-Parameters)\"\n  },\n  {\n    \"variable_name\": \"msg_type\",\n    \"alias\": [],\n    \"type\": \"HandshakeType\",\n    \"definition\": \"Handshake message type field in the DTLS Handshake structure.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"struct {\\n     HandshakeType msg_type;\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Length field in the DTLS Handshake structure.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"uint24 length;\"\n  },\n  {\n    \"variable_name\": \"message_seq\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Handshake message sequence number field used to order DTLS handshake messages.\",\n    \"initial_value_or_range\": \"First message each side transmits in each handshake has message_seq = 0; incremented by one for each new message; retransmissions use the same value.\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"uint16 message_seq;                               // New field\\n\\nThe first message each side transmits in each handshake always has\\n   message_seq = 0.  Whenever each new message is generated, the\\n   message_seq value is incremented by one.\"\n  },\n  {\n    \"variable_name\": \"fragment_offset\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Handshake message fragment offset field in the DTLS Handshake structure.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"uint24 fragment_offset;                           // New field\"\n  },\n  {\n    \"variable_name\": \"fragment_length\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Handshake message fragment length field in the DTLS Handshake structure.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"uint24 fragment_length;                           // New field\"\n  },\n  {\n    \"variable_name\": \"body\",\n    \"alias\": [],\n    \"type\": \"select (HandshakeType)\",\n    \"definition\": \"Handshake message body selected according to the HandshakeType.\",\n    \"initial_value_or_range\": \"May be HelloRequest, ClientHello, HelloVerifyRequest, ServerHello, Certificate, ServerKeyExchange, CertificateRequest, ServerHelloDone, CertificateVerify, ClientKeyExchange, or Finished depending on HandshakeType.\",\n    \"module_or_section\": \"4.2.2. Handshake Message Format\",\n    \"evidence\": \"select (HandshakeType) {\\n       case hello_request: HelloRequest;\\n       case client_hello:  ClientHello;\\n       case hello_verify_request: HelloVerifyRequest;  // New type\\n       case server_hello:  ServerHello;\\n       case certificate:Certificate;\\n       case server_key_exchange: ServerKeyExchange;\\n       case certificate_request: CertificateRequest;\\n       case server_hello_done:ServerHelloDone;\\n       case certificate_verify:  CertificateVerify;\\n       case client_key_exchange: ClientKeyExchange;\\n       case finished: Finished;\\n     } body;\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0009",
+      "parsed_count": 4,
+      "raw_response": "[\n  {\n    \"variable_name\": \"message_seq\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"Value carried in each handshake message fragment; all fragments created from an original handshake message use the same message_seq value as the original handshake message.\",\n    \"initial_value_or_range\": \"Same value as the original handshake message.\",\n    \"module_or_section\": \"Handshake message fragmentation discussion\",\n    \"evidence\": \"The sender then creates N handshake messages, all with the same message_seq value as the original handshake message.\"\n  },\n  {\n    \"variable_name\": \"fragment_offset\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"The number of bytes contained in previous fragments.\",\n    \"initial_value_or_range\": \"For an unfragmented message: fragment_offset=0.\",\n    \"module_or_section\": \"Handshake message fragmentation discussion\",\n    \"evidence\": \"Each new message is labeled with the fragment_offset (the number of bytes contained in previous fragments) and the fragment_length (the length of this fragment).\"\n  },\n  {\n    \"variable_name\": \"fragment_length\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"The length of this fragment.\",\n    \"initial_value_or_range\": \"For an unfragmented message: fragment_length=length.\",\n    \"module_or_section\": \"Handshake message fragmentation discussion\",\n    \"evidence\": \"Each new message is labeled with the fragment_offset (the number of bytes contained in previous fragments) and the fragment_length (the length of this fragment).\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"\",\n    \"definition\": \"The length field in each fragmented handshake message is the same as the length field of the original message.\",\n    \"initial_value_or_range\": \"Same as the original message length field.\",\n    \"module_or_section\": \"Handshake message fragmentation discussion\",\n    \"evidence\": \"The length field in all messages is the same as the length field of the original message.\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0010",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0011",
+      "parsed_count": 12,
+      "raw_response": "[\n  {\n    \"variable_name\": \"type\",\n    \"alias\": [],\n    \"type\": \"ContentType\",\n    \"definition\": \"Content type field of the DTLSPlaintext record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct {\\n        ContentType type;\\n        ProtocolVersion version;\\n        uint16 epoch;\\n        uint48 sequence_number;\\n        uint16 length;\\n        opaque fragment[DTLSPlaintext.length];\\n      } DTLSPlaintext;\"\n  },\n  {\n    \"variable_name\": \"version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Protocol version field of the DTLSPlaintext record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"struct {\\n        ContentType type;\\n        ProtocolVersion version;\\n        uint16 epoch;\\n        uint48 sequence_number;\\n        uint16 length;\\n        opaque fragment[DTLSPlaintext.length];\\n      } DTLSPlaintext;\"\n  },\n  {\n    \"variable_name\": \"epoch\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Epoch field of the DTLSPlaintext record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"uint16 epoch;                                     // New field\"\n  },\n  {\n    \"variable_name\": \"sequence_number\",\n    \"alias\": [],\n    \"type\": \"uint48\",\n    \"definition\": \"Sequence number field of the DTLSPlaintext record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"uint48 sequence_number;                           // New field\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Length field of the DTLSPlaintext record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"uint16 length;\"\n  },\n  {\n    \"variable_name\": \"fragment\",\n    \"alias\": [],\n    \"type\": \"opaque[DTLSPlaintext.length]\",\n    \"definition\": \"Fragment payload field of the DTLSPlaintext record, with size determined by DTLSPlaintext.length.\",\n    \"initial_value_or_range\": \"DTLSPlaintext.length\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSPlaintext\",\n    \"evidence\": \"opaque fragment[DTLSPlaintext.length];\"\n  },\n  {\n    \"variable_name\": \"type\",\n    \"alias\": [],\n    \"type\": \"ContentType\",\n    \"definition\": \"Content type field of the DTLSCompressed record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"struct {\\n        ContentType type;\\n        ProtocolVersion version;\\n        uint16 epoch;\\n        uint48 sequence_number;\\n        uint16 length;\\n        opaque fragment[DTLSCompressed.length];\\n      } DTLSCompressed;\"\n  },\n  {\n    \"variable_name\": \"version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Protocol version field of the DTLSCompressed record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"struct {\\n        ContentType type;\\n        ProtocolVersion version;\\n        uint16 epoch;\\n        uint48 sequence_number;\\n        uint16 length;\\n        opaque fragment[DTLSCompressed.length];\\n      } DTLSCompressed;\"\n  },\n  {\n    \"variable_name\": \"epoch\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Epoch field of the DTLSCompressed record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"uint16 epoch;                                     // New field\"\n  },\n  {\n    \"variable_name\": \"sequence_number\",\n    \"alias\": [],\n    \"type\": \"uint48\",\n    \"definition\": \"Sequence number field of the DTLSCompressed record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"uint48 sequence_number;                           // New field\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Length field of the DTLSCompressed record.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"uint16 length;\"\n  },\n  {\n    \"variable_name\": \"fragment\",\n    \"alias\": [],\n    \"type\": \"opaque[DTLSCompressed.length]\",\n    \"definition\": \"Fragment payload field of the DTLSCompressed record, with size determined by DTLSCompressed.length.\",\n    \"initial_value_or_range\": \"DTLSCompressed.length\",\n    \"module_or_section\": \"4.3.1. Record Layer / DTLSCompressed\",\n    \"evidence\": \"opaque fragment[DTLSCompressed.length];\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0012",
+      "parsed_count": 31,
+      "raw_response": "[\n  {\n    \"variable_name\": \"type\",\n    \"alias\": [],\n    \"type\": \"ContentType\",\n    \"definition\": \"Content type field in DTLSCiphertext.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"ContentType type;\"\n  },\n  {\n    \"variable_name\": \"version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Protocol version field in DTLSCiphertext.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"ProtocolVersion version;\"\n  },\n  {\n    \"variable_name\": \"epoch\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Epoch field in DTLSCiphertext.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"uint16 epoch;                                     // New field\"\n  },\n  {\n    \"variable_name\": \"sequence_number\",\n    \"alias\": [],\n    \"type\": \"uint48\",\n    \"definition\": \"Sequence number field in DTLSCiphertext.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"uint48 sequence_number;                           // New field\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Length field in DTLSCiphertext.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"uint16 length;\"\n  },\n  {\n    \"variable_name\": \"fragment\",\n    \"alias\": [],\n    \"type\": \"select (CipherSpec.cipher_type): GenericBlockCipher or GenericAEADCipher\",\n    \"definition\": \"Ciphertext fragment selected by CipherSpec.cipher_type.\",\n    \"initial_value_or_range\": \"case block: GenericBlockCipher; case aead: GenericAEADCipher\",\n    \"module_or_section\": \"DTLSCiphertext\",\n    \"evidence\": \"select (CipherSpec.cipher_type) {\\n          case block:  GenericBlockCipher;\\n          case aead:   GenericAEADCipher;                 // New field\\n        } fragment;\"\n  },\n  {\n    \"variable_name\": \"hello_request\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for hello_request.\",\n    \"initial_value_or_range\": \"0\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"hello_request(0)\"\n  },\n  {\n    \"variable_name\": \"client_hello\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for client_hello.\",\n    \"initial_value_or_range\": \"1\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"client_hello(1)\"\n  },\n  {\n    \"variable_name\": \"server_hello\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for server_hello.\",\n    \"initial_value_or_range\": \"2\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"server_hello(2)\"\n  },\n  {\n    \"variable_name\": \"hello_verify_request\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for hello_verify_request.\",\n    \"initial_value_or_range\": \"3\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"hello_verify_request(3),                          // New field\"\n  },\n  {\n    \"variable_name\": \"certificate\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for certificate.\",\n    \"initial_value_or_range\": \"11\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"certificate(11)\"\n  },\n  {\n    \"variable_name\": \"server_key_exchange\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for server_key_exchange.\",\n    \"initial_value_or_range\": \"12\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"server_key_exchange (12)\"\n  },\n  {\n    \"variable_name\": \"certificate_request\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for certificate_request.\",\n    \"initial_value_or_range\": \"13\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"certificate_request(13)\"\n  },\n  {\n    \"variable_name\": \"server_hello_done\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for server_hello_done.\",\n    \"initial_value_or_range\": \"14\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"server_hello_done(14)\"\n  },\n  {\n    \"variable_name\": \"certificate_verify\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for certificate_verify.\",\n    \"initial_value_or_range\": \"15\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"certificate_verify(15)\"\n  },\n  {\n    \"variable_name\": \"client_key_exchange\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for client_key_exchange.\",\n    \"initial_value_or_range\": \"16\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"client_key_exchange(16)\"\n  },\n  {\n    \"variable_name\": \"finished\",\n    \"alias\": [],\n    \"type\": \"HandshakeType enum value\",\n    \"definition\": \"HandshakeType identifier for finished.\",\n    \"initial_value_or_range\": \"20\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / HandshakeType\",\n    \"evidence\": \"finished(20)\"\n  },\n  {\n    \"variable_name\": \"msg_type\",\n    \"alias\": [],\n    \"type\": \"HandshakeType\",\n    \"definition\": \"Handshake message type field.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"HandshakeType msg_type;\"\n  },\n  {\n    \"variable_name\": \"length\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Handshake message length field.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"uint24 length;\"\n  },\n  {\n    \"variable_name\": \"message_seq\",\n    \"alias\": [],\n    \"type\": \"uint16\",\n    \"definition\": \"Handshake message sequence field.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"uint16 message_seq;                               // New field\"\n  },\n  {\n    \"variable_name\": \"fragment_offset\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Handshake fragment offset field.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"uint24 fragment_offset;                           // New field\"\n  },\n  {\n    \"variable_name\": \"fragment_length\",\n    \"alias\": [],\n    \"type\": \"uint24\",\n    \"definition\": \"Handshake fragment length field.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"uint24 fragment_length;                           // New field\"\n  },\n  {\n    \"variable_name\": \"body\",\n    \"alias\": [],\n    \"type\": \"select (HandshakeType)\",\n    \"definition\": \"Handshake body selected by HandshakeType.\",\n    \"initial_value_or_range\": \"hello_request: HelloRequest; client_hello: ClientHello; server_hello: ServerHello; hello_verify_request: HelloVerifyRequest; certificate: Certificate; server_key_exchange: ServerKeyExchange; certificate_request: CertificateRequest; server_hello_done: ServerHelloDone; certificate_verify: CertificateVerify; client_key_exchange: ClientKeyExchange; finished: Finished\",\n    \"module_or_section\": \"4.3.2. Handshake Protocol / Handshake\",\n    \"evidence\": \"select (HandshakeType) {\\n       case hello_request: HelloRequest;\\n       case client_hello:  ClientHello;\\n       case server_hello:  ServerHello;\\n       case hello_verify_request: HelloVerifyRequest;  // New field\\n       case certificate:Certificate;\\n       case server_key_exchange: ServerKeyExchange;\\n       case certificate_request: CertificateRequest;\\n       case server_hello_done:ServerHelloDone;\\n       case certificate_verify:  CertificateVerify;\\n       case client_key_exchange: ClientKeyExchange;\\n       case finished: Finished;\\n     } body;\"\n  },\n  {\n    \"variable_name\": \"client_version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Client protocol version field in ClientHello.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"ProtocolVersion client_version;\"\n  },\n  {\n    \"variable_name\": \"random\",\n    \"alias\": [],\n    \"type\": \"Random\",\n    \"definition\": \"Random field in ClientHello.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"Random random;\"\n  },\n  {\n    \"variable_name\": \"session_id\",\n    \"alias\": [],\n    \"type\": \"SessionID\",\n    \"definition\": \"Session ID field in ClientHello.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"SessionID session_id;\"\n  },\n  {\n    \"variable_name\": \"cookie\",\n    \"alias\": [],\n    \"type\": \"opaque\",\n    \"definition\": \"Cookie field in ClientHello.\",\n    \"initial_value_or_range\": \"0..2^8-1\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"opaque cookie<0..2^8-1>;                             // New field\"\n  },\n  {\n    \"variable_name\": \"cipher_suites\",\n    \"alias\": [],\n    \"type\": \"CipherSuite\",\n    \"definition\": \"Cipher suites vector field in ClientHello.\",\n    \"initial_value_or_range\": \"2..2^16-1\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"CipherSuite cipher_suites<2..2^16-1>;\"\n  },\n  {\n    \"variable_name\": \"compression_methods\",\n    \"alias\": [],\n    \"type\": \"CompressionMethod\",\n    \"definition\": \"Compression methods vector field in ClientHello.\",\n    \"initial_value_or_range\": \"1..2^8-1\",\n    \"module_or_section\": \"ClientHello\",\n    \"evidence\": \"CompressionMethod compression_methods<1..2^8-1>;\"\n  },\n  {\n    \"variable_name\": \"server_version\",\n    \"alias\": [],\n    \"type\": \"ProtocolVersion\",\n    \"definition\": \"Server protocol version field in HelloVerifyRequest.\",\n    \"initial_value_or_range\": \"\",\n    \"module_or_section\": \"HelloVerifyRequest\",\n    \"evidence\": \"ProtocolVersion server_version;\"\n  },\n  {\n    \"variable_name\": \"cookie\",\n    \"alias\": [],\n    \"type\": \"opaque\",\n    \"definition\": \"Cookie field in HelloVerifyRequest.\",\n    \"initial_value_or_range\": \"0..2^8-1\",\n    \"module_or_section\": \"HelloVerifyRequest\",\n    \"evidence\": \"opaque cookie<0..2^8-1>;\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0013",
+      "parsed_count": 15,
+      "raw_response": "[\n  {\n    \"variable_name\": \"TLS_DH_anon_WITH_RC4_128_MD5\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x18\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x18 TLS_DH_anon_WITH_RC4_128_MD5          [RFC5246]\"\n  },\n  {\n    \"variable_name\": \"TLS_KRB5_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x20\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x20 TLS_KRB5_WITH_RC4_128_SHA             [RFC2712]\"\n  },\n  {\n    \"variable_name\": \"TLS_KRB5_WITH_RC4_128_MD5\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x24\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x24 TLS_KRB5_WITH_RC4_128_MD5             [RFC2712]\"\n  },\n  {\n    \"variable_name\": \"TLS_KRB5_EXPORT_WITH_RC4_40_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x28\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x28 TLS_KRB5_EXPORT_WITH_RC4_40_SHA       [RFC2712]\"\n  },\n  {\n    \"variable_name\": \"TLS_KRB5_EXPORT_WITH_RC4_40_MD5\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x2B\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x2B TLS_KRB5_EXPORT_WITH_RC4_40_MD5       [RFC2712]\"\n  },\n  {\n    \"variable_name\": \"TLS_PSK_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x8A\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x8A TLS_PSK_WITH_RC4_128_SHA              [RFC4279]\"\n  },\n  {\n    \"variable_name\": \"TLS_DHE_PSK_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x8E\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x8E TLS_DHE_PSK_WITH_RC4_128_SHA          [RFC4279]\"\n  },\n  {\n    \"variable_name\": \"TLS_RSA_PSK_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0x00,0x92\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0x00,0x92 TLS_RSA_PSK_WITH_RC4_128_SHA          [RFC4279]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDH_ECDSA_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x02\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x02 TLS_ECDH_ECDSA_WITH_RC4_128_SHA       [RFC4492]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDHE_ECDSA_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x07\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x07 TLS_ECDHE_ECDSA_WITH_RC4_128_SHA      [RFC4492]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDH_RSA_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x0C\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x0C TLS_ECDH_RSA_WITH_RC4_128_SHA         [RFC4492]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDHE_RSA_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x11\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x11 TLS_ECDHE_RSA_WITH_RC4_128_SHA        [RFC4492]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDH_anon_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x16\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x16 TLS_ECDH_anon_WITH_RC4_128_SHA        [RFC4492]\"\n  },\n  {\n    \"variable_name\": \"TLS_ECDHE_PSK_WITH_RC4_128_SHA\",\n    \"alias\": [],\n    \"type\": \"TLS cipher suite identifier\",\n    \"definition\": \"Cipher suite registry entry.\",\n    \"initial_value_or_range\": \"0xC0,0x33\",\n    \"module_or_section\": \"TLS cipher suite registry excerpt\",\n    \"evidence\": \"0xC0,0x33 TLS_ECDHE_PSK_WITH_RC4_128_SHA        [RFC5489]\"\n  },\n  {\n    \"variable_name\": \"hello_verify_request\",\n    \"alias\": [],\n    \"type\": \"TLS HandshakeType\",\n    \"definition\": \"Handshake message type allocated from the TLS HandshakeType registry.\",\n    \"initial_value_or_range\": \"3\",\n    \"module_or_section\": \"IANA / TLS HandshakeType registry\",\n    \"evidence\": \"This document defines a new handshake message, hello_verify_request, whose value has been allocated from the TLS HandshakeType registry defined in [TLS12].  The value \\\"3\\\" has been assigned by the IANA.\"\n  }\n]",
+      "attempts": 1
+    },
+    {
+      "chunk_id": "chunk_0014",
+      "parsed_count": 0,
+      "raw_response": "[]",
+      "attempts": 1
+    }
+  ]
+}

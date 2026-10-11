@@ -1,0 +1,23 @@
+{
+  "status": "done",
+  "input": "D:\\project\\conditionFuzzingPaper\\output\\mock_cases\\case_stop_after_review.json",
+  "output": "D:\\project\\conditionFuzzingPaper\\output\\mock_cases\\out_stop_after_review.json",
+  "total_items": 1,
+  "matched_index": 0,
+  "matched_result": "[non-English text removed]satisfied",
+  "first_reason": "reason-A: [non-English text removed]",
+  "review_stage": {
+    "model": "gpt-5.4",
+    "result": {
+      "certain_inconsistent": false,
+      "verdict": "[non-English text removed]",
+      "analysis": "mock: reason [non-English text removed]。",
+      "conflicts": [],
+      "confidence": 0.83
+    }
+  },
+  "need_test_with_gpt_5_3_codex": false,
+  "test_stage": null,
+  "llm_calls": 1,
+  "final_decision": "gpt-5.4 [non-English text removed]。"
+}

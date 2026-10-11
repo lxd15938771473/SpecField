@@ -1,0 +1,32 @@
+python d:\project\conditionFuzzingPaper\step4_find_related_files.py 
+  --files-from d:\project\conditionFuzzingPaper\symbols.csv 
+  --changes-file d:\project\conditionFuzzingPaper\output\02_variable_changes.json 
+  --api-key YOUR_API_KEY 
+  --base-url https://api.zhizengzeng.com/v1/ 
+  --model gpt-5.4 
+  --top-k 5 
+  --output d:\project\conditionFuzzingPaper\output\04_related_files_by_change.json
+
+
+
+python d:\project\conditionFuzzingPaper\step4_find_related_files.py ^
+  --files-from d:\project\conditionFuzzingPaper\symbols.csv ^
+  --changes-file d:\project\conditionFuzzingPaper\output\02_variable_changes.json ^
+  --max-items 10 ^
+  --api-key YOUR_API_KEY
+
+
+python .\utils\variable_context_pipeline.py `
+  --repo-root . `
+  --var-name alert,quota `
+  --desc "[non-English text removed]" `
+  --use-llm `
+  --api-key "[non-English text removed]key"
+
+
+python utils/recheck_not_satisfied_reason.py --input result.json --output output/recheck_not_satisfied_final.json --api-key "$env:OPENAI_API_KEY" --review-model gpt-5.4 --test-model gpt-5.3-codex
+
+
+extract_tls_change_contexts2.py (line 13) [non-English text removed] extract_tls_change_contexts.py (line 494) [non-English text removed] extract_change_contexts()（[non-English text removed] (line 158)）。
+extract_tls_change_contexts.py (line 612) [non-English text removed]（main()）。
+[non-English text removed]）。

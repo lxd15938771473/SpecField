@@ -1,0 +1,21 @@
+wolfssl-master/
+__pycache__/
+.vscode/
+.claude.vscode
+output/stage1_chunks/
+output/stage2_chunks/
+output/workflow/
+sol-master/
+mosquitto-master/
+test-wolfssl-dtls/
+/wolfMQTT/
+
+# Local settings, credentials, and Python environments
+.claude/settings.local.json
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+*.py[cod]
+
